@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 消息队列（三）Kafka
-category: 我的技术
+category: 消息传递
 tags: Kafka 消息队列
 ---
 

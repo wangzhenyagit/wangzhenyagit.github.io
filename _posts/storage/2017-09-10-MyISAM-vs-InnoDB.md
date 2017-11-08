@@ -1,7 +1,7 @@
 ---
 layout: post
 title: MyISAM与InnoDB引擎
-category: 我的技术
+category: 存储系统
 tags: mysql
 keywords: mysql
 ---

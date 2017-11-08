@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Nginx与HAproxy对比测试
-category: 性能分析
+category: 我的技术
 tags: Nginx HAproxy
 keywords: Nginx HAproxy
 ---

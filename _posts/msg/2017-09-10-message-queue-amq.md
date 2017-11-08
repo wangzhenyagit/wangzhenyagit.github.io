@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 消息队列（二）AMQ
-category: 我的技术
+category: 消息传递
 tags: 消息队列
 ---
 

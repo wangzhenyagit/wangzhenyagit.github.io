@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 搜索引擎与数据库检索区别
-category: 我的技术
+category: 存储系统
 tags: 搜索引擎 数据库索引
 keywords: 搜索 索引
 ---

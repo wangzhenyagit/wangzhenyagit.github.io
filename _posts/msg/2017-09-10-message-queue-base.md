@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 消息队列（一）介绍与常见实现
-category: 我的技术
+category: 消息传递
 tags: 消息队列
 ---
 

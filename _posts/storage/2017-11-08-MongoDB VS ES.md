@@ -1,7 +1,7 @@
 ---
 layout: post
 title: MongoDB VS ES
-category: 我的技术
+category: 存储系统
 tags: Mongodb Elasticsearch
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Hbase （一）概述
-category: 数据技术
+category: 存储系统
 tags: Hbase
 keywords: Hbase
 ---
