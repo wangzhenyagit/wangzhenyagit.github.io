@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 负载均衡技术
-category: 我的技术
+category: 软件架构
 tags: 负载均衡
 keywords: 负载均衡 nginx Haproxy
 ---
