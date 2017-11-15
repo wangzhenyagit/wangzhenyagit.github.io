@@ -1,11 +1,11 @@
 ---
 layout: post
-title: wget突破cookie限制--用wget批量下载中国联通沃商店app
-category: 我的技术
+title: wget突破cookie限制
+category: 杂七杂八
 tags: wget
 ---
 
-第一次技术贴~~
+第一次技术贴~~用wget批量下载中国联通沃商店app
 这两天一直纠结这个问题，今天来个了结，在网上参考的也挺乱，顺便理理思路~
 目标网站http://mstore.wo.com.cn/index.action?terindex=&page=320fantastic&loginSign=0&seeAllApp=1这个网站怎么看都不是像一个身处垄断行业的公司做出来的，竟然都不可以自由的选择页码，估计就是联通的实习生做了几个星期做出来的，真的穷到这份上了么~
 cookie主要应用有

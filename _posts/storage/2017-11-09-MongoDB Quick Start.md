@@ -1,0 +1,76 @@
+---
+layout: post
+title: MongoDB Quick Start
+category: 存储系统
+tags: MongoDB
+---
+
+## 下载与安装 ##
+用的操作系统比较老，官网上没有对应的二进制包，github上的release一直也没有下载下来，直接git clone下代码， git clone https://github.com/mongodb/mongo.git。
+
+查看docs下的building.md编译的依赖环境，我这版本的要求gcc和python,要求GCC 5.4.0 or newer 
+，Python 2.7.x and Pip modules:pyyaml和typing 。
+
+### 升级gcc ###
+先安装gcc，从官网下载的源代码，安装依赖包：
+```
+./contrib/download_prerequisites
+```   
+安装的时候报错“bzip2：无法 exec: 没有那个文件或目录”，我看命令行，用的tar命令么，这命令可以用么，查了下才知道tar只是个管理工具，相当于一个壳，真正压缩的不同的格式的用到了其他的工具，比如这个bzip2，安装下就好了。  
+```
+yum install bzip2 
+```  
+然后configure下，make，然后报错“configure: error: error verifying int64_t uses long long”查了下，原因可能是因为没有安装g++，yum安装  
+```
+yum install gcc-c++ libstdc++-devel
+```  
+继续make，在make install，最后需要在替换下系统中默认的gcc  
+```
+rm /usr/bin/gcc
+/usr/sbin/update-alternatives --install  /usr/bin/gcc gcc /usr/local/bin/x86_64-unknown-linux-gnu-gcc-5.2.0 52
+```
+8核的机器编译了将近两个小时，然后gcc -v 验证下版本。可以参考：[Linux升级安装GCC](https://itbilu.com/linux/management/V1vdnt9ll.html)
+
+### Python Prerequisites ###
+安装python和相关包，这个yaml是yum源的扩展包
+yum install python-yaml
+
+CentOS yum源 中默认没有 pip，需要安装 扩展源EPEL
+yum -y install epel-release
+yum -y install python-pip
+pip install typing
+
+开始没有按照git上给的要求安装Python的相关库，因为git上的说明只说了Python的pyyal和typing，结果在安装mongo的时候报错：“no module named cheetah.template”，按照github上的要求，安装requirements即可。
+
+```
+$ pip2 install -r buildscripts/requirements.txt
+```
+
+### 安装scons ###
+源码包[下载地址](http://iweb.dl.sourceforge.net/project/scons/scons/2.3.6/scons-2.3.6.tar.gz),下载后
+依赖解决
+```
+yum install pcre-devel python-devel
+```
+解压安装
+```
+tar -zxvf scons-2.3.6.tar.gz && cd scons-2.3.6
+python setup.py install
+```
+
+### 安装mongodb ###
+```
+python2 buildscripts/scons.py all
+python2 buildscripts/scons.py --prefix=/opt/mongo install
+```
+
+安装也要不短的时间，然后再进入/opt/mongo/bin下运行mongd，报错
+```
+/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.21' not found
+```
+按照[解决类似 /usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.21' not found 的问题](https://itbilu.com/linux/management/NymXRUieg.html)解决即可，然在运行，提示data目录不存在，说明已经可以运行了。
+
+
+参考：
+[源码编译MongoDB](http://moelove.info/2015/09/13/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91MongoDB/)
+

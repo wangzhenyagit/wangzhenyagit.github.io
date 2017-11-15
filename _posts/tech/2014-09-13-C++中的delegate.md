@@ -1,7 +1,7 @@
 ---
 layout: post
 title: C++中的delegate
-category: 我的技术
+category: 杂七杂八
 tags: delegate
 ---
  

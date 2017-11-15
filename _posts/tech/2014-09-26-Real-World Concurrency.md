@@ -1,9 +1,11 @@
 ---
 layout: post
-title: Real-World Concurrency
-category: 我的翻译
+title: Real-World Concurrency（翻译）
+category: 杂七杂八
 tags: 翻译 并行开发
 ---
+
+第一次翻译，发现很费劲~~
 
 Know your cold paths from your hot paths. If there is one piece of advice to dispense to those who must develop parallel systems, it is to know which paths through your code you want to be able to execute in parallel (the hot paths) versus which paths can execute sequentially without affecting performance (the cold paths). In our experience, much of the software we write is bone-cold in terms of concurrent execution: it is executed only when initializing, in administrative paths, when unloading, etc. Not only is it a waste of time to make such cold paths execute with a high degree of parallelism, but it is also dangerous: these paths are often among the most difficult and error-prone to parallelize.
 In cold paths, keep the locking as coarse-grained as possible. Don’t hesitate to have one lock that covers a wide range of rare activity in your subsystem. Conversely, in hot paths—those that must execute concurrently to deliver highest throughput—you must be much more careful: locking strategies must be simple and fine-grained, and you must be careful to avoid activity that can become a bottleneck. And what if you don’t know if a given body of code will be the hot path in the system? In the absence of data, err on the side of assuming that your code is in a cold path and adopt a correspondingly coarse-grained locking strategy—but be prepared to be proven wrong by the data.

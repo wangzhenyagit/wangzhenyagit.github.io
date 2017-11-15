@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 用Debug Diagnostic诊断内存泄露问题
-category: 我的技术
+category: 杂七杂八
 tags: Debug Diagnostic
 ---
 
