@@ -1,7 +1,7 @@
 ---
 layout: post
 title: epoll和select区别
-category: 网络编程
+category: 操作系统
 tags: epoll select 
 ---
 

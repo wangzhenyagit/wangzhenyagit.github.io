@@ -22,5 +22,6 @@ tags: 总结
 根据shard为单位均衡，而不是根据具体设备来均衡，一是设备数量可能很多10w，如果按照10w来进行均衡，均衡工作就会很复杂，master节点负载会很大。
 - [滚动重启机制](https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_rolling_restarts.html#_rolling_restarts) 对于接入集群也可以参考
 - 为什么需要时序数据库？ https://db-engines.com/en/blog_post/71 
+- 并发编程的坑？ http://blog.csdn.net/solstice/article/details/5915355
 
 

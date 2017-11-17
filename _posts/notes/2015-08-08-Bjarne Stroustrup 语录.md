@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Bjarne Stroustrup 语录
-category: 编码规范
+category: 读书笔记
 tags: 编程规则
 ---
 
