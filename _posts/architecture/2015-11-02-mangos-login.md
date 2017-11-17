@@ -1,7 +1,7 @@
 ---
 layout: post
 title: mangos（二）认证登录基本流程
-category: 开源研究
+category: 软件架构
 tags: mangos
 ---
 
