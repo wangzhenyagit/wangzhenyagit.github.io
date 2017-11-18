@@ -38,7 +38,7 @@ rs.initiate()
 当然没那么顺利，code码93报错信息：
 > FailedToParse: Empty host component parsing HostAndPort from \":27017\" for member:{ _id: 0, host: \":27017\" }
 
-Mongodb的配置问题，ip配置的问题，Mongodb默认也是没有配置文件的，需要手动加个，直接放在etc下吧，源码安装的，是有个默认的配置的，名字叫mongod.conf可以find下拷贝到etc下,然后编辑下，直接把那行“bindIp: 127.0.0.1”加上个本级ip，改成“bindIp: 10.xx.xx.xx,127.0.0.1”,kill掉在启动
+Mongodb的配置问题，ip配置的问题，Mongodb默认也是没有配置文件的，需要手动加个，直接放在etc下吧，源码安装的，是有个默认的配置的，名字叫mongod.conf可以find下拷贝到etc下,然后编辑下，直接把那行“bindIp: 127.0.0.1”加上个本机ip，改成“bindIp: 10.xx.xx.xx,127.0.0.1”,kill掉在启动
 
 ```
 nohup mongod --port 27017 --dbpath /home/mongodb/data/db0 --config /etc/mongod.conf --replSet rs0 &
@@ -177,7 +177,7 @@ rs.status()
 pip install mongo-connector
 ```
 
-然后mongo-connector --help就可以看到支持的参数了，mongo-connector项目上的简单介绍：
+然后mongo-connector -h就可以看到支持的参数了，mongo-connector项目上的简单介绍：
 
 ```
 mongo-connector -m <mongodb server hostname>:<replica set port> 
