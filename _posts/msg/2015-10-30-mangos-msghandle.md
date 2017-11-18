@@ -1,7 +1,7 @@
 ---
 layout: post
 title: mangos（一）概述与消息处理机制
-category: 软件架构
+category: 消息传递
 tags: mangos
 ---
 
