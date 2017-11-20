@@ -15,11 +15,7 @@ tags: mongodb
 
 > The oplog (operations log) is a special capped collection that keeps a rolling record of all operations that modify the data stored in your databases. MongoDB applies database operations on the primary and then records the operations on the primary’s oplog. The secondary members then copy and apply these operations in an asynchronous process.
 
-Mysql数据库，即使没有slave数据库，也会有binlog的，这binlog有两个作用，一是可以从master数据库保持同步，二是在数据库损坏的情况下可以根据binlog恢复数据库，而且我看到的资料，binlog只对性能有1%的损耗。看上面的对Mongodb的oplog的介绍，一点也没说从错误中恢复的事情，看来这oplog就是没打算用在这方面了，有待继续考证，因为加了这oplog按照Mysql的数据，对性能损耗也大不了多少，关键是了解的系统如Hbase、ES等都有个log的。
-
-如果Mongodb单机运行真的没有这oplog，那这oplog，应该叫“Replica Set Oplog”，官网上介绍的章节也确实叫这名字，[Replica Set Oplog](https://docs.mongodb.com/manual/core/replica-set-oplog/)。
-
-不在纠结这个问题，先看下如何把Mongodb中的数据同步到ES中。
+Mysql数据库，即使没有slave数据库，也会有binlog的，这binlog有两个作用，一是可以从master数据库保持同步，二是在数据库损坏的情况下可以根据binlog恢复数据库，而且我看到的资料，binlog只对性能有1%的损耗。看上面的对Mongodb的oplog的介绍，一点也没说从错误中恢复的事情，看来这oplog就是没打算用在这方面了，因为加了这oplog按照Mysql的数据，对性能损耗也大不了多少，关键是了解的系统如Hbase、ES等都有个log的。虽然这oplog没有这功能，但是，Mongodb其实是有个单独的机制的，叫[journaling](https://docs.mongodb.com/manual/core/journaling/)。那为什么没有像Mysql这样，用同一个log呢？待研究。
 
 ### Convert a Standalone to a Replica Set ###
 

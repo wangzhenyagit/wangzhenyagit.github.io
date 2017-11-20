@@ -5,6 +5,7 @@ category: 我的思考
 tags: 总结
 ---
 
+- 如何使用puppet进行部署
 - Hbase如何定位数据？Kafka如何定位数据？
 - Mysql的缓存机制有哪些?
 - 插入数据的时候，ES返回成功的时候，已经持久化到磁盘了么？Mysql的高速插入，断电的话会有1s的数据丢失 https://dev.mysql.com/doc/refman/5.7/en/myisam-key-cache.html   
