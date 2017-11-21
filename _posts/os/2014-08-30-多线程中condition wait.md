@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 多线程中condition wait
-category: 杂七杂八
+category: 操作系统
 tags: 多线程 condition wait
 ---
 一般在多线程编程中都会用到condition_wait，在linux下也就是pthread_cond_wait这个系统调用，大多高性能的多线程程序也离不开这基本的东西。在看线程调度代码的时候突然想起这个方法，一直用ace，很操作系统的东西都忘得差不多了。下面一段是一年前对这个系统调用的理解:
