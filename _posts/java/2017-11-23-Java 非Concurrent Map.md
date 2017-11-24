@@ -91,6 +91,17 @@ static int indexFor(int h, int length) {
 
 抛开目前的实现，如果一个hash的大小扩大了一倍，那最理想的rehash的方式就是有一半（扩大了一倍）的hash均匀分布到新的空间（保持hash的效率），而又一半最好原地不动（减少内存操作和cpu周期）。而且判断是否要移动的方式要尽量快。目前的设计，恰恰满足了这几个条件，算法的力量。
 
+### Fail Fast机制 ###
+在使用迭代器的过程中如果HashMap（ArrayList也一样）被修改，那么ConcurrentModificationException将被抛出，也即Fast-fail策略。
+
+> 当HashMap的iterator()方法被调用时，会构造并返回一个新的EntryIterator对象，并将EntryIterator的expectedModCount设置为HashMap的modCount（该变量记录了HashMap被修改的次数）。
+> 
+> 在通过该Iterator的next方法访问下一个Entry时，它会先检查自己的expectedModCount与HashMap的modCount是否相等，如果不相等，说明HashMap被修改，直接抛出ConcurrentModificationException。该Iterator的remove方法也会做类似的检查。该异常的抛出意在提醒用户及早意识到线程安全问题。
+
+这里有个问题，虽然抛出这ConcurrentModificationException，但是并不一定是有fail的，比如修改的地方在迭代器已经遍历过了，而用户对实时性要求并不高，wiki上的解释也印证了这一点：
+
+> In systems design, a fail-fast system is one which immediately reports at its interface any condition that is likely to indicate a failure. Fail-fast systems are usually designed to stop normal operation rather than attempt to continue a possibly flawed process. Such designs often check the system's state at several points in an operation, so any failures can be detected early. The responsibility of a fail-fast module is detecting errors, then let the next-highest level of the system to handle them.
+
 ### 参考 ###
 [Java HashMap工作原理及实现](http://yikun.github.io/2015/04/01/Java-HashMap%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/)
 

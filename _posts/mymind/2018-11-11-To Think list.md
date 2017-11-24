@@ -24,7 +24,8 @@ tags: 总结
 - [滚动重启机制](https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_rolling_restarts.html#_rolling_restarts) 对于接入集群也可以参考
 - 为什么需要时序数据库？ https://db-engines.com/en/blog_post/71 
 - 并发编程的坑？ http://blog.csdn.net/solstice/article/details/5915355
-
+- lock free的结构 https://stackoverflow.com/a/260277
+- 并发好的结构的选择 http://www.drdobbs.com/parallel/choose-concurrency-friendly-data-structu/208801371?pgno=2
 
 <!--
 final、finally
