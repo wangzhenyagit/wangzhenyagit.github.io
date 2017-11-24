@@ -26,3 +26,14 @@ tags: 总结
 - 并发编程的坑？ http://blog.csdn.net/solstice/article/details/5915355
 
 
+<!--
+final、finally
+单例模式
+NIO
+Redis的原理
+控制反转与AOP原理
+基本数据类型
+HashCode与equal
+受异常检查，不受异常检查
+throw、throws
+-->
