@@ -27,14 +27,8 @@ tags: 总结
 - lock free的结构 https://stackoverflow.com/a/260277
 - 并发好的结构的选择 http://www.drdobbs.com/parallel/choose-concurrency-friendly-data-structu/208801371?pgno=2
 
-<!--
-final、finally
-单例模式
-NIO
-Redis的原理
-控制反转与AOP原理
-基本数据类型
-HashCode与equal
-受异常检查，不受异常检查
-throw、throws
--->
+
+### To learn 
+- 京东618大促网关承载十亿调用量背后的架构实践 http://mp.weixin.qq.com/s/6nYROabwFT1o9ppH2TbPhA  
+- 人工智能在线特征系统中的数据存取技术 https://mp.weixin.qq.com/s/kPmvBCcS0O-jTgE_VAysug  
+- 每秒处理10万高并发订单的乐视集团支付系统架构分享 http://www.zuidaima.com/blog/2852602576456704.htm  
