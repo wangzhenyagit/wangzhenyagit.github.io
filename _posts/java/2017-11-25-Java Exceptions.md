@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Java异常机制
+title: Java Exceptions
 category: Java相关
 tags: Java
 ---
@@ -29,7 +29,34 @@ C语言是没有异常机制的，从这点上就能看出来这异常机制的�
 其中第一点和第三点上面已经说到了，第二点意思是说在捕获到异常的时候，会把调用的栈信息提供出来，这样定位问题就非常的方便。
 
 ## Unchecked Exceptions ##
-[Unchecked Exceptions — The Controversy](https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html)
+这Unchecked Exception也叫Runtime Exception，默认的继承自Exception接口的都是checked exception，而继承自Runtime Exception的维Unchecked Exception。为啥叫checked？谁check？对于checked的异常，编译器编译的时候会检查的，你的方法外面有没有处理了这异常。
+
+通常来说，Checked Exception如果客户端捕获到是知道如何处理的，而Runtime Exception是客户端处理不了的，所以其实捕获到也没有什么意义，如果自定义异常，那么绝大多数应该是checked exception类型的。只有一种情况比较特殊，用户使用方法的方式不对，比如传入的参数为空指针，可以直接抛个unchecked的NullPointerException异常。
+
+对于checked exception是需要在声明方法的时候一起说明的，而且是客户端必须捕获的，下面说明了原因，这些异常被认为与参数与返回值一样，是方法的一个部分，如果要使用这方法，必须处理这些异常。
+
+> Why did the designers decide to force a method to specify all uncaught checked exceptions that can be thrown within its scope? 
+> 
+> Any Exception that can be thrown by a method is part of the method's public programming interface. Those who call a method must know about the exceptions that a method can throw so that they can decide what to do about them. These exceptions are as much a part of that method's programming interface as its parameters and return value.
+
+java中的几个unchecked exception的类型：
+
+- NullPointerException
+- ArrayIndexOutOfBound
+- IllegalArgumentException
+- IllegalStateException
+- NumberFormatException
+- ArithmaticException
+
+checked exception 类型：
+
+- IOException
+- SQLException
+- DataAccessException
+- ClassNotFoundException
+- InstantiationException
 
 ## 参考 ##
-[Java 提高篇(四) --- 异常处理](http://liuzxc.github.io/blog/java-advance-04/)
+[Java 提高篇(四) --- 异常处理](http://liuzxc.github.io/blog/java-advance-04/)  
+[Unchecked Exceptions — The Controversy](https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html)
+
