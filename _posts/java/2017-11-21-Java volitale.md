@@ -1,4 +1,4 @@
----layout: posttitle: Java关键字volitalecategory: Java相关tags: Java---### 为什么要使用Volatile ###> Volatile变量修饰符如果使用恰当的话，它比synchronized的使用和执行成本会更低，因为它不会引起线程上下文的切换和调度。
+---layout: posttitle: Java Volitalecategory: Java相关tags: Java---### 为什么要使用Volatile ###> Volatile变量修饰符如果使用恰当的话，它比synchronized的使用和执行成本会更低，因为它不会引起线程上下文的切换和调度。
 ### Volatile的实现原理 ###
 > 在x86处理器下通过工具获取JIT编译器生成的汇编指令来看看对Volatile进行写操作CPU会做什么事情。 Java代码：instance = new Singleton();//instance是volatile变量  
 > 对应汇编代码两条：  movb $0x0,0x1104800(%esi);  lock addl $0x0,(%esp);  
