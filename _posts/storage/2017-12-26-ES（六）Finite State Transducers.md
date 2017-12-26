@@ -15,4 +15,9 @@ tags: es
 
 先看下，在有索引，返回多条数据的情况。Mongodb都干了啥，首先要知道，这种二级索引，
 
-[Using Finite State Transducers in Lucene](http://blog.mikemccandless.com/2010/12/using-finite-state-transducers-in.html)
+[Using Finite State Transducers in Lucene](http://blog.mikemccandless.com/2010/12/using-finite-state-transducers-in.html)  
+[Lucene学习总结之三：Lucene的索引文件格式 (1)](http://forfuture1978.iteye.com/blog/546824)   
+[Lucene's RAM usage for searching](http://blog.mikemccandless.com/2010/07/lucenes-ram-usage-for-searching.html)  
+[Apache Lucene - Index File Formats](http://lucene.apache.org/core/2_9_4/fileformats.html)    
+[Choosing a fast unique identifier (UUID) for Lucene](http://blog.mikemccandless.com/2014/05/choosing-fast-unique-identifier-uuid.html)
+[Lucene学习总结之三：Lucene的索引文件格式 (1)](http://forfuture1978.iteye.com/blog/546824)
