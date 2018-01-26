@@ -291,5 +291,57 @@ mongo-connector -c /etc/mongo-connector.conf
 }
 ```
 
+### 使用中遇到的问题 ###
+
+使用monggo-connector从mongo同步到es中遇到两个问题：
+
+#### 1. 同步到ES的过程中，monggo-connector报错： ####
+
+> 2018-01-09 21:30:41,808 [ERROR] mongo_connector.oplog_manager:202 - OplogThread: Last entry no longer in oplog cannot recover! Collection(Database(MongoClient(host=[u'localhost:27017'], document_class=dict, tz_aware=False, connect=True, replicaset=u'rs0'), u'local'), u'oplog.rs')  
+> 2018-01-09 21:30:42,165 [ERROR] mongo_connector.connector:398 - MongoConnector: OplogThread <OplogThread(Thread-3, stopped 140514745640704)unexpectedly stopped! Shutting down
+
+#### 2. 对第一个问题按照mongo的git的wiki上的解答[Resyncing the Connector](https://github.com/mongodb-labs/mongo-connector/wiki/Resyncing-the-Connector)处理后，发现monggo-connector中记录同步进度的文件(oplog process file)里面一直没有数据 ####
+
+下面分别对下面两个问题进行分析：
+
+### 问题分析:同步到ES的过程中，monggo-connector报错 ###
+参考[Resyncing the Connector](https://github.com/mongodb-labs/mongo-connector/wiki/Resyncing-the-Connector)，引起问题的原因是mongo的oplog是个[capped collection](https://docs.mongodb.com/manual/core/capped-collections/)，一个固定大小的集合，超过这个大小就会覆盖以前的记录。当oplog相对较小，后者mongo的插入速度一直大于从mongo到es的同步速度的时候，就会发生这个问题。解决办法么，就是给个相对较大的oplog的size。
+
+另外，如果要重新同步数据，git的wiki中的步骤是需要先删除es中的数据，重新的index一遍。删除es中的数据后，把monggo-connectorde的oplog process file删除。这样monggo-connector会发现进度文件没有，会新创建文件，并进行一次collection-dump操作，把整张表dump到es中，然后从dump后的时间根据mongo的oplog继续同步。
+
+如果只是有indert和update操作，没有delete操作，也可以不用删除es中的数据，直接删除oplog process file，如果有删除操作，collection-dump操作并不知道哪些数据在之前es中的被删除掉了，这样collection-dump后，es中仍然后之前被删除掉的数据。
+
+### 问题分析：oplog process file里面一直没有数据 ###
+这不是一个问题。按照[Collection Dumps and the Oplog Progress File](https://github.com/mongodb-labs/mongo-connector/wiki/Oplog-Progress-File#collection-dumps-and-the-oplog-progress-file)中的描述：
+
+> When the oplog progress file cannot be found, or if it is empty, Mongo Connector will begin pulling data from all MongoDB collections (or the ones given in --namespace-set) in the "collection dump" phase. The oplog progress file is then updated with the most recent timestamp from before the dump happened. 
+
+由于要保持数据的同步，而oplog大小有限，对于一个长时间运行的系统，oplog一般是不全的，所以操作如下，记录下当前时间t1，然后全collection拷贝，拷贝完后，从t1时间的oplog进行后面的操作同步。monggo-connector的代码如下：
+
+```
+def upsert_all(dm):
+    try:
+        for namespace in dump_set:
+            from_coll = self.get_collection(namespace)
+            total_docs = retry_until_ok(from_coll.count)
+            mapped_ns = self.namespace_config.map_namespace(
+                    namespace)
+            LOG.debug("Bulk upserting approximately %d docs from "
+                     "collection '%s'",
+                     total_docs, namespace)
+            dm.bulk_upsert(docs_to_dump(from_coll),
+                           mapped_ns, long_ts)
+    except Exception:
+        if self.continue_on_error:
+            LOG.exception("OplogThread: caught exception"
+                          " during bulk upsert, re-upserting"
+                          " documents serially")
+            upsert_each(dm)
+        else:
+            raise
+```
+
+上面的dm参数是docManager，即使写成debug的级别的日志，能看到一批批的数据插入到es，但是没有进度信息。而问题发现的时候有3亿条数据，ES的插入速度又比较慢，过了1天多的时间Oplog Progress File才有数据。
+
 ### 参考 ###
 [mongo-connector的Readme](https://github.com/mongodb-labs/mongo-connector)
