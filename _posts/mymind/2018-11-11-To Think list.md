@@ -5,7 +5,10 @@ category: 我的思考
 tags: 总结
 ---
 
-- Json的最佳实践
+- OOM问题如何避免？
+- mmap机制？https://stackoverflow.com/questions/19280412/mongo-server-status-resident-memory 
+- Mongod的两种引擎 https://docs.mongodb.com/manual/core/wiredtiger/#storage-wiredtiger  https://docs.mongodb.com/manual/core/mmapv1/#storage-mmapv1  
+- Json的最佳实践，fastJson的Git相关文章
 - Mongo、HDFS、FastDfs、ES、是否需要raid技术
 - 如何使用puppet进行部署
 - Mysql的缓存机制有哪些?
