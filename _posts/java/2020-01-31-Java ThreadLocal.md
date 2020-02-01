@@ -161,7 +161,81 @@ private int expungeStaleEntry(int staleSlot) {
 }
 ```
 
-## 为什么Entry的key需要为WeakReferer？
+## 为什么Entry的key需要为WeakReference？
 如果entry的key不是WeakReference，在使用线程池的情况下，如果一个流程中的在set后没有去调用remove（需要开发个新的remove方法），即使调用了threadLocal = null也会导致内存泄漏。由于此ThreadLocalMap属于线程，而ThreadLocalMap中的Entry也是有个强引用的key（ThreadLocal），那么第这个new出来的ThreadLocal就会内存泄漏了，而且对应的value也会泄漏。如果为WeakReference，在外部的强引用没有后，gc就会首先把key（ThreadLocal）给回收掉，然后在set、get操作下触发cleanSomeSlots，解决大部分的内存泄漏问题。
 
+## What is a canonicalizing mapping, why would I use one and how do weak references help?
 
+java jdk对于weakreference的说明如下：
+>  Weak reference objects, which do not prevent their referents from being
+>  made finalizable, finalized, and then reclaimed. Weak references are
+>  most often used to implement canonicalizing mappings. 
+
+什么是canonicalizing mapping？google的翻译是“规范化”？wiki上的一个词条[CanonicalizedMapping](https://wiki.c2.com/?CanonicalizedMapping)
+
+A "canonicalized" mapping is where you keep one instance of the object in question in memory and all others look up that particular instance via pointers or somesuch mechanism. This is where weaks references can help.
+The short answer is that WeakReference objects can be used to create pointers to objects in your system while still allowing those objects to be reclaimed by the garbage-collector once they pass out of scope. For example if I had code like this:
+```
+ class Registry {
+     private Set registeredObjects = new HashSet();
+
+     public void register(Object object) {
+         registeredObjects.add( object );
+     }
+ }
+ ```
+
+Any object I register will never be reclaimed by the GC because there is a reference to it stored in the set of registeredObjects. On the other hand if I do this:
+```
+ class Registry {
+     private Set registeredObjects = new HashSet();
+
+     public void register(Object object) {
+         registeredObjects.add( new WeakReference(object) );
+     }
+ }
+ ```
+
+Then when the GC wants to reclaim the objects in the Set it will be able to do so.
+You can use this technique for caching, cataloguing, etc. See below for references to much more in-depth discussions of GC and caching.
+
+强行理解下，在使用map的场景下，key使用weakReference类型，才是“规范化”的。不使用虽然问题可以避免（手动去清理map）但使用了大多数场景下好像也没有太多的副作用。所以，如果下次使用Map，对于key可以先考虑下，是否需要使用weakReference。
+
+就上上面的例子，订阅者的列表使用map存放，因为map中本来就有个对与注册对象的强引用，如果只是简单的，new出来的外部对象也有个强引用，而通常来说，java开发者简单的把外部的对象给置null就会认为gc会收集此对象，但是因为有map中的强引用，会一直不能gc掉。所以有了者weakReference的使用场景。  
+
+和ThreadLocal的场景很像，ThreadLocal中这样使用可以避免一定程度的内存泄漏，把废弃的ThreadLocal给赋值null，虽然并不是一个好的实践（应该调用remove方法），但也可以减少一定程度的内存泄漏。  
+
+## 为什么ThreadLocal使用容易出问题？
+个人感觉，封装的太“好”了，大家只知道set和get，很多不知道需要调用个remove。而且使用完一个对象去调用remove方法，很非主流。如果不是看了源码，鬼知道去调用remove。如果线程池的场景，如果使用完不去remove，内存泄漏非常容易，是个明显的java的坑。主要是隐藏了信息，线程可能是复用的，还有就是ThreadLocal存储在了map中。
+
+## set，get的时候为什么没有加锁？为什么没有直接使用HashMap？
+不加锁是因为调度的问题，不会出现一个线程的时间片同时被执行的情况。
+
+为什么没有使用HashMap？set的时候是在自己计算table中的offset，而不是直接用的HashMap。  
+
+Hash冲突解决的方式主要大概分两种，Separate chaining和Open addressing，翻译为单独链表法与开放地址法。
+
+HashMap的Separate chaining with linked lists方式特点是数据结构简单，对于存储数量较多的数据时候，仍能有一定的性能保证。
+
+> Chained hash tables with linked lists are popular because they require only basic data structures with simple algorithms, and can use simple hash functions that are unsuitable for other methods.
+> 
+> The cost of a table operation is that of scanning the entries of the selected bucket for the desired key. If the distribution of keys is sufficiently uniform, the average cost of a lookup depends only on the average number of keys per bucket—that is, it is roughly proportional to the load factor.
+> 
+> For this reason, chained hash tables remain effective even when the number of table entries n is much higher than the number of slots. For example, a chained hash table with 1000 slots and 10,000 stored keys (load factor 10) is five to ten times slower than a 10,000-slot table (load factor 1); but still 1000 times faster than a plain sequential list.
+
+缺点就是，因为为链表，有个next的空间存储浪费，且由于list的插入、删除导致结构变化缓存失效的很快。
+
+> Chained hash tables also inherit the disadvantages of linked lists. When storing small keys and values, the space overhead of the next pointer in each entry record can be significant. An additional disadvantage is that traversing a linked list has poor cache performance, making the processor cache ineffective.
+
+而ThreadLocalMap的方式用的开放地址中的Linear probing（线性探测）方法，最大优势就是容易缓存，存储的是个连续的空间，有好的访问局部性（locality of reference），而且越是ThreadLocalMap的size越小，访问局部性特性就越明显，而ThreadLocal设计初衷并不是为了数据缓存较大规模的数据存储使用，只是解决并发中变量访问的问题。so，线性探测的方式主要是为了性能，而不是减少那些存储空间（线程数不会很多，ThreadLocalMap也不会很多）。
+
+> Linear probing provides good locality of reference, which causes it to require few uncached memory accesses per operation. Because of this, for low to moderate load factors, it can provide very high performance. 
+
+还有为什么叫opend addressing？
+> The name "open addressing" refers to the fact that the location ("address") of the item is not determined by its hash value. 
+
+通俗理解，地址并不是绝对地会被哪个item占用的，而是open的。像单独链表法中，一个item每次都会占用同样的bucket。
+
+## 参考
+[hash table](https://en.wikipedia.org/wiki/Hash_table)  
+[Linear_probing](https://en.wikipedia.org/wiki/Linear_probing)
