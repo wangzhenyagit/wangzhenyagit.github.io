@@ -1,7 +1,7 @@
 ---
 layout: post
 title: boost bind性能开销分析
-category: 杂七杂八
+category: 性能分析
 tags: boost bind
 ---
 

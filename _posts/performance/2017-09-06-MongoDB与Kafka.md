@@ -1,7 +1,7 @@
 ---
 layout: post
 title: MongoDB与Kafka性能测试
-category: 性能测试
+category: 性能分析
 tags: MongoDB
 ---
 
