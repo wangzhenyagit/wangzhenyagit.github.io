@@ -27,6 +27,8 @@ tags: Java
 
 > 所有的理念都可以追溯到Spring的最根本使命上：简化Java开发。
 
+PS：这可能也是spring的一个第一性原理
+
 从语言层面上看，Java相对于C/C++，开发效率已经有很大的提升，如果说Java是简化了以前类型安全的语言的开发，Spring框架在此之上更近一步简化了Java的开发，当然还有更厉害的Spring Boot —— 简化了Spring的开发。
 
 Spring是如何简化Java开发的？Spring采用了四种策略。
