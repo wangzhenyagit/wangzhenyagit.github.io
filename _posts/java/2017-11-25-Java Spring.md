@@ -5,7 +5,7 @@ category: Java相关
 tags: Java
 ---
 
-## OverView ##
+## OverView
 
 文章多数参考wiki和《Spring In Action》第四版，如不说明，英文引用wiki，中文的引用《Spring In Action》。
 
@@ -27,6 +27,8 @@ tags: Java
 
 > 所有的理念都可以追溯到Spring的最根本使命上：简化Java开发。
 
+另，在spring.io的官网上，非常醒目的slogan：“Spring makes Java simple.”
+
 PS：这可能也是spring的一个第一性原理
 
 从语言层面上看，Java相对于C/C++，开发效率已经有很大的提升，如果说Java是简化了以前类型安全的语言的开发，Spring框架在此之上更近一步简化了Java的开发，当然还有更厉害的Spring Boot —— 简化了Spring的开发。
@@ -37,6 +39,10 @@ Spring是如何简化Java开发的？Spring采用了四种策略。
 > - 通过依赖注入和面向接口实现松耦合；
 > - 基于切面和惯例进行声明式编程；
 > - 通过切面和模板减少样板试代码；
+
+这第一条应该是四条中的核心，比如DI、AOP、注解等，都是为了让POJO对象保持简单，最小化的入侵。
+
+POJO的轻量级和最小化的入侵有什么好处？这个spirng的核心可以对应软件设计的核心：开闭原则。轻量级的入侵小的POJO更满足职责单一，尤其在加上DI和AOP，更是实现开闭原则的关键手段。
 
 POJO可以简单理解为没有受到约束的的一般的Java对象：
 > Ideally speaking, a POJO is a Java object not bound by any restriction other than those forced by the Java Language Specification
